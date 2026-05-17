@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { loadEnv } from 'vite'
 
 const ENV_KEYS = ['FAL_KEY', 'FAL_API_KEY']
 
@@ -57,20 +56,12 @@ export function getFalKey() {
   const mode =
     process.env.NODE_ENV === 'production' ? 'production' : 'development'
 
-  const viteEnv = loadEnv(mode, cwd, '')
   const envFile = parseEnvFile(resolve(cwd, '.env'))
   const envLocal = parseEnvFile(resolve(cwd, '.env.local'))
   const envMode = parseEnvFile(resolve(cwd, `.env.${mode}`))
   const envModeLocal = parseEnvFile(resolve(cwd, `.env.${mode}.local`))
 
-  return pickKey([
-    process.env,
-    envModeLocal,
-    envMode,
-    envLocal,
-    envFile,
-    viteEnv,
-  ])
+  return pickKey([process.env, envModeLocal, envMode, envLocal, envFile])
 }
 
 export function isFalKeyConfigured() {
